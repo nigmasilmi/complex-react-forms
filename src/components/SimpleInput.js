@@ -4,22 +4,20 @@ const SimpleInput = (props) => {
   // piece needed to send to a backend
   const [enteredName, setEnteredName] = useState("");
 
-  // piece that informs if the input is valid or not
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
-
   // only validate if the input is touched => better ux
   const [enteredNameIsTouched, setEnteredNameIsTouched] = useState(false);
+
+  // derived constant that informs if the input is valid or not
+  const enteredNameIsValid = enteredName.trim() !== "";
+
+  // combine isTouched + isValid
+  const nameInputIsInvalid =
+    enteredNameIsTouched && !enteredNameIsValid && enteredNameIsTouched;
 
   // triggers onChange
   const nameInputChangeHandler = (event) => {
     // is touching, so set to true
     setEnteredNameIsTouched(true);
-
-    // simple validation, but to true if the user is correcting it
-    if (event.target.value.trim() !== "") {
-      setEnteredNameIsValid(true);
-    }
-
     setEnteredName(event.target.value);
   };
 
@@ -28,12 +26,6 @@ const SimpleInput = (props) => {
     // onBlur means that tried to enter something and then went out
     // so, it was touched
     setEnteredNameIsTouched(true);
-
-    // simple validation
-    if (enteredName.trim() === "") {
-      setEnteredNameIsValid(false);
-      return;
-    }
   };
 
   // triggers onSubmit
@@ -43,20 +35,18 @@ const SimpleInput = (props) => {
     // asume all fields were touched
     setEnteredNameIsTouched(true);
 
-    // simple validation
-    if (enteredName.trim() === "") {
-      setEnteredNameIsValid(false);
+    // check if is not valid
+    if (!enteredNameIsValid) {
       return;
     }
-    // passes the validation, then set to valid
-    setEnteredNameIsValid(true);
+
+    // if the validation passes, reset to untouched
+    setEnteredNameIsTouched(false);
 
     // clear the input
     setEnteredName("");
   };
 
-  // combine isTouched + isValid
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameIsTouched;
   // control the classes for validation feedback
   const nameInputClasses = nameInputIsInvalid
     ? "form-control invalid"
