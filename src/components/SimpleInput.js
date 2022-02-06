@@ -14,6 +14,13 @@ const SimpleInput = (props) => {
   const nameInputIsInvalid =
     enteredNameIsTouched && !enteredNameIsValid && enteredNameIsTouched;
 
+  // overall form validity with derived states
+  let formIsValid = false;
+
+  if (enteredNameIsValid) {
+    formIsValid = true;
+  }
+
   // triggers onChange
   const nameInputChangeHandler = (event) => {
     // is touching, so set to true
@@ -67,7 +74,7 @@ const SimpleInput = (props) => {
         )}
       </div>
       <div className="form-actions">
-        <button>Submit</button>
+        <button disabled={!formIsValid}>Submit</button>
       </div>
     </form>
   );
